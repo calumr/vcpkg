@@ -27,7 +27,7 @@ vcpkg_configure_cmake(
     SOURCE_PATH ${SOURCE_PATH}
     # PREFER_NINJA # Disable this option if project cannot be built with Ninja
     OPTIONS
-        -DOSG_USE_UTF8_FILENAME=ON
+        -DOSG_USE_UTF8_FILENAME=ON -DCMAKE_DISABLE_FIND_PACKAGE_GDAL=TRUE
     # OPTIONS_RELEASE -DOPTIMIZE=1
     # OPTIONS_DEBUG -DDEBUGGABLE=1
 )

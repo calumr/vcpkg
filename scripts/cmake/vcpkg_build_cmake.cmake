@@ -44,7 +44,7 @@ function(vcpkg_build_cmake)
             "/p:VCPkgLocalAppDataDisabled=true"
             "/p:UseIntelMKL=No"
         )
-        set(PARALLEL_ARG "/m")
+        set(PARALLEL_ARG "/m:7")
     elseif(_VCPKG_CMAKE_GENERATOR MATCHES "NMake")
         # No options are currently added for nmake builds
     else()
