@@ -11,6 +11,15 @@ if ($copiedFilesLog)
     Set-Content -Path $copiedFilesLog -Value "" -Encoding Ascii
 }
 
+$dumpbin = "dumpbin"
+$path = & 'C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe' -latest -products * -requires Microsoft.Component.MSBuild -property installationPath
+if ($path) {
+  $path = join-path $path 'VC\Tools\MSVC\14.12.25827\bin\Hostx86\x86\dumpbin.exe'
+  if (test-path $path) {
+    $dumpbin = $path
+  }
+}
+
 # Note: this function signature is depended upon by the qtdeploy.ps1 script introduced in 5.7.1-7
 function deployBinary([string]$targetBinaryDir, [string]$SourceDir, [string]$targetBinaryName) {
     if (Test-Path "$targetBinaryDir\$targetBinaryName") {
@@ -36,7 +45,7 @@ function resolve([string]$targetBinary) {
     }
     $targetBinaryDir = Split-Path $targetBinaryPath -parent
 
-    $a = $(dumpbin /DEPENDENTS $targetBinary | ? { $_ -match "^    [^ ].*\.dll" } | % { $_ -replace "^    ","" })
+    $a = $(& $dumpbin /DEPENDENTS $targetBinary | ? { $_ -match "^    [^ ].*\.dll" } | % { $_ -replace "^    ","" })
     $a | % {
         if ([string]::IsNullOrEmpty($_)) {
             return
